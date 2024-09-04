@@ -1,5 +1,6 @@
 import { StoreState, useStore } from "@/store";
 import { markAsDone, sleep, swap } from "./utils";
+import { Item } from "@/components/AlgorithmVisualizer/Item";
 
 type SortConfig = Pick<
   StoreState,
@@ -12,7 +13,7 @@ type SortConfig = Pick<
 >;
 
 const partition = async (
-  arr: number[],
+  arr: Item[],
   left: number,
   right: number,
   config: SortConfig
@@ -36,7 +37,7 @@ const partition = async (
     setActiveItems([arr[i], pivotValue]);
     await sleep(speedRef.current);
 
-    if (arr[i] < pivotValue) {
+    if (arr[i].value < pivotValue.value) {
       swap(arr, i, pivotIndex);
       pivotIndex++;
       setTempItems([...arr.slice(left, pivotIndex)]);
@@ -47,13 +48,13 @@ const partition = async (
   swap(arr, pivotIndex, right);
   setItems([...arr]);
   setTempItems([]);
-  markAsDone(arr[pivotIndex], setDoneItems); // Mark the pivot as done
+  markAsDone(arr, arr[pivotIndex], setDoneItems); // Mark the pivot as done
 
   return pivotIndex;
 };
 
 const sort = async (
-  arr: number[],
+  arr: Item[],
   left: number,
   right: number,
   config: SortConfig
@@ -67,7 +68,7 @@ const sort = async (
     await sort(arr, left, partitionIndex - 1, config);
     await sort(arr, partitionIndex + 1, right, config);
   } else if (left === right) {
-    markAsDone(arr[left], config.setDoneItems);
+    markAsDone(arr, arr[left], config.setDoneItems);
   }
 
   if (left === 0 && right === arr.length - 1) {

@@ -24,6 +24,7 @@ export const AlgorithmVisualizer = () => {
     setItemMaxHeight(containerHeight);
   }
 
+
   return (
     <div className="border border-accent/50 lg:border-none lg:bg-accent rounded flex items-center justify-center overflow-hidden h-full p-1 md:p-2 lg:p-3 xl:p-8">
       <Reorder.Group
@@ -40,12 +41,12 @@ export const AlgorithmVisualizer = () => {
       >
         {items.map((item) => (
           <Item
-            key={`${arrayId}-${item}`}
+            key={`${arrayId}-${item.id}`}
             itemMaxHeight={itemMaxHeight}
-            item={item}
-            isActive={activeItems.includes(item)}
-            isDone={doneItems.includes(item)}
-            isTemp={tempItems.includes(item)}
+            item={item.value}
+            isActive={activeItems.some(activeItem => activeItem.id === item.id)} 
+            isDone={doneItems.some(doneItem => doneItem.id === item.id)}         
+            isTemp={tempItems.some(tempItem => tempItem.id === item.id)}   
           />
         ))}
       </Reorder.Group>

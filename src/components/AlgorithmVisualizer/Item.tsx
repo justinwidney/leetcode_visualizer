@@ -4,6 +4,13 @@ import { motion, Reorder } from "framer-motion";
 import { memo } from "react";
 import { MAX_ITEM } from "@/utils/generateItems";
 
+
+
+export interface Item {
+  id: string;
+  value: number;
+}
+
 type Props = {
   item: number;
   isActive: boolean;

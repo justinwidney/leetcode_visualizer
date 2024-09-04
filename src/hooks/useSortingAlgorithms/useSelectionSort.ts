@@ -1,5 +1,6 @@
 import { useStore } from "@/store";
 import { sleep } from "./utils";
+import { Item } from "@/components/AlgorithmVisualizer/Item";
 
 export const useSelectionSort = () => {
   const { items, setItems, setActiveItems, setDoneItems, speedRef, abortRef } =
@@ -9,7 +10,7 @@ export const useSelectionSort = () => {
     const result = [...items];
 
     const findMinIndex = async (
-      arr: number[],
+      arr: Item[],
       start: number
     ): Promise<number> => {
       let minIndex = start;
@@ -17,7 +18,7 @@ export const useSelectionSort = () => {
         if (abortRef.current) return -1; // Check if animation should stop
         setActiveItems([arr[i], arr[minIndex]]);
         await sleep(speedRef.current);
-        if (arr[i] < arr[minIndex]) {
+        if (arr[i].value < arr[minIndex].value) {
           minIndex = i;
         }
       }

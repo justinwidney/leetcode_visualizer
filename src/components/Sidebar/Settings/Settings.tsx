@@ -1,6 +1,7 @@
 import { DisplayModeSelector } from "./DisplayModeSelector";
 import { SizeSelector } from "./SizeSelector";
 import { Title } from "../Title";
+import { KValueSelector } from "./KValueSelector";
 
 export const Settings = () => {
   return (
@@ -8,6 +9,7 @@ export const Settings = () => {
       <Title title="Settings" />
       <SizeSelector />
       <DisplayModeSelector />
+      <KValueSelector />
     </div>
   );
 };

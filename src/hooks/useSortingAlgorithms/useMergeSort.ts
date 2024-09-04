@@ -1,5 +1,6 @@
 import { StoreState, useStore } from "@/store";
 import { sleep } from "./utils";
+import { Item } from "@/components/AlgorithmVisualizer/Item";
 
 type SortConfig = Pick<
   StoreState,
@@ -12,13 +13,13 @@ type SortConfig = Pick<
 >;
 
 const merge = async (
-  leftArr: number[],
-  rightArr: number[],
+  leftArr: Item[],
+  rightArr: Item[],
   config: SortConfig
-): Promise<number[] | null> => {
+): Promise<Item[] | null> => {
   const { setItems, setActiveItems, speedRef, abortRef, setTempItems } = config;
 
-  let sortedArray: number[] = [];
+  let sortedArray: Item[] = [];
   setActiveItems([...leftArr, ...rightArr]);
   await sleep(speedRef.current);
 
@@ -30,7 +31,7 @@ const merge = async (
     }
 
     if (leftArr.length && rightArr.length) {
-      if (leftArr[0] < rightArr[0]) {
+      if (leftArr[0].value < rightArr[0].value) {
         sortedArray.push(leftArr.shift()!);
       } else {
         sortedArray.push(rightArr.shift()!);
@@ -67,9 +68,9 @@ const merge = async (
 };
 
 const mergeSort = async (
-  arr: number[],
+  arr: Item[],
   config: SortConfig
-): Promise<number[] | null> => {
+): Promise<Item[] | null> => {
   if (config.abortRef.current) {
     config.setActiveItems([]);
     config.setTempItems([]);

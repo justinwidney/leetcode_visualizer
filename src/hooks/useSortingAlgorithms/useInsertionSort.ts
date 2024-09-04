@@ -27,7 +27,7 @@ export const useInsertionSort = () => {
 
         setActiveItems([current, compared]);
         await sleep(speedRef.current);
-        if (compared > current) {
+        if (compared.value > current.value) {
           swap(arr, j, j + 1);
           setItems([...arr]);
           setTempItems((prev) => [...prev, current]);

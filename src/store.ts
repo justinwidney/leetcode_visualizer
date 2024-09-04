@@ -1,8 +1,10 @@
 import { create } from "zustand";
 import { createRef, MutableRefObject } from "react";
-import { generateUniqueRandomItems } from "./utils/generateItems";
+import { generateUniqueRandomItems, generateRandomItems } from "./utils/generateItems";
 import type { Algorithm, DisplayMode, StateUpdater } from "./types";
 import { resolveState } from "./utils/stateUpdater";
+import type { Item } from "./components/AlgorithmVisualizer/Item";
+
 
 export type StoreState = {
   isMobile: boolean;
@@ -10,22 +12,24 @@ export type StoreState = {
   speedRef: MutableRefObject<number>;
   abortRef: MutableRefObject<boolean>;
   isPlaying: boolean;
+  kValue: number;
   activeAlgorithm: Algorithm;
   size: number;
   displayMode: DisplayMode;
-  items: number[];
-  activeItems: number[];
-  tempItems: number[];
-  doneItems: number[];
+  items: Item[]
+  activeItems: Item[]
+  tempItems: Item[]
+  doneItems: Item[]
   setIsMobile: (isMobile: boolean) => void;
   setDisplayMode: (displayMode: DisplayMode) => void;
   setIsPlaying: (isPlaying: boolean) => void;
+  setKValue: (kValue: number) => void;
   setActiveAlgorithm: (algorithm: Algorithm) => void;
   setSize: (size: number) => void;
-  setItems: StateUpdater<number[]>;
-  setActiveItems: StateUpdater<number[]>;
-  setTempItems: StateUpdater<number[]>;
-  setDoneItems: StateUpdater<number[]>;
+  setItems: StateUpdater<Item[]>;
+  setActiveItems: StateUpdater<Item[]>;
+  setTempItems: StateUpdater<Item[]>;
+  setDoneItems: StateUpdater<Item[]>;
   createNewArray: () => void;
 };
 
@@ -35,11 +39,12 @@ speedRef.current = 500;
 let abortRef = createRef<boolean>() as React.MutableRefObject<boolean>; // eslint-disable-line prefer-const
 abortRef.current = false;
 
-export const useStore = create<StoreState>((set) => ({
+export const useStore = create<StoreState>((set, get) => ({
   isMobile: false,
   arrayId: 0,
   speedRef,
   abortRef,
+  kValue: 0,
   isPlaying: false,
   activeAlgorithm: "selection",
   displayMode: "bars",
@@ -49,9 +54,27 @@ export const useStore = create<StoreState>((set) => ({
   tempItems: [],
   doneItems: [],
   setIsMobile: (isMobile) => set({ isMobile }),
+  setKValue: (kValue: number) => set({ kValue }),
   setIsPlaying: (isPlaying) => set({ isPlaying }),
   setDisplayMode: (displayMode) => set({ displayMode }),
-  setActiveAlgorithm: (algorithm) => set({ activeAlgorithm: algorithm }),
+  setActiveAlgorithm: (algorithm) => {
+
+    //const size = get().size
+
+    set({ activeAlgorithm: algorithm })
+
+    switch (algorithm) {
+      case "jump":
+        set({ 
+          items: generateRandomItems(10, 0, 5),
+          arrayId: get().arrayId + 1,
+        });
+        break;
+      default:
+        break;
+    }
+  }, 
+
   setSize: (size) =>
     set((state) => ({
       size,
@@ -74,6 +97,7 @@ export const useStore = create<StoreState>((set) => ({
     set((state) => ({
       doneItems: resolveState(doneItems, state.doneItems),
     })),
+
   createNewArray: () =>
     set((state) => ({
       items: generateUniqueRandomItems(state.size),

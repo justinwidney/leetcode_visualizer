@@ -1,5 +1,6 @@
 import { StoreState, useStore } from "@/store";
 import { sleep, swap } from "./utils";
+import { Item } from "@/components/AlgorithmVisualizer/Item";
 
 const bubble = async ({
   arr,
@@ -11,7 +12,7 @@ const bubble = async ({
 }: Pick<
   StoreState,
   "abortRef" | "speedRef" | "setItems" | "setActiveItems" | "setDoneItems"
-> & { arr: number[] }) => {
+> & { arr: Item[] }) => {
   const len = arr.length;
   for (let i = 0; i < len; i++) {
     for (let j = 0; j < len - 1 - i; j++) {
@@ -19,7 +20,7 @@ const bubble = async ({
       setActiveItems([arr[j], arr[j + 1]]);
       await sleep(speedRef.current);
 
-      if (arr[j] > arr[j + 1]) {
+      if (arr[j].value > arr[j + 1].value) {
         swap(arr, j, j + 1);
         setItems([...arr]);
       }
