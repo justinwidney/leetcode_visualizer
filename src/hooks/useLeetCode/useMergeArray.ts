@@ -1,5 +1,5 @@
 import { StoreState, useStore } from "@/store";
-import { markAsDone, sleep, markAsTemp} from "./utils";
+import { markAsDone, sleep, markAsTemp} from "../useSortingAlgorithms/utils";
 import { Item } from "@/components/AlgorithmVisualizer/Item";
 
 type SortConfig = Pick<
@@ -17,6 +17,9 @@ type SortConfig = Pick<
 
 const rotate = async (
   arr: Item[],
+  arr2: Item[],
+  m: number,
+  n: number,
   config: SortConfig, 
 ): Promise<Item[] | null> => {
   if (config.abortRef.current) {
@@ -25,31 +28,28 @@ const rotate = async (
     return null; // Abort early if abortRef is set
   }
 
-    let maxReachableIndex: number = 0;
-
-
-    for (let i: number = 0; i < arr.length; i++) {
+    let k: number = m+n-1
+    let j: number = n-1
+    let i: number = m-1
     
-      config.setActiveItems([arr[i]]);
-
-      await sleep(config.speedRef.current);
-
-      if (i > maxReachableIndex) {
-        return arr;
-      }
-      maxReachableIndex = Math.max(maxReachableIndex, i + arr[i].value);
-
-      markAsDone(arr, arr[i].value, config.setDoneItems)
-
-      config.setTempItems([arr[Math.min(maxReachableIndex, arr.length - 1)]]);
-      
+    while(j >= 0){
+        if ( i >=0 && arr[i].value > arr2[j].value){
+            arr[k] = arr[i]
+            k--;
+            i--;
+        }
+        else{
+            arr[k] = arr2[j]
+            k--
+            j--
+        }
     }
 
   return arr;
 
 };
 
-export const useJump = () => {
+export const useMergArray = () => {
   const {
     items,
     setItems,
@@ -74,7 +74,7 @@ export const useJump = () => {
 
 
   const sort = async () => {
-    const sortedArray = await rotate([...items], config);
+    const sortedArray = await rotate([...items], [...items], 3, 3, config);
     if (sortedArray !== null && !abortRef.current) {
       setItems(sortedArray);
       //setDoneItems(sortedArray);

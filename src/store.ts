@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createRef, MutableRefObject } from "react";
 import { generateUniqueRandomItems, generateRandomItems } from "./utils/generateItems";
-import type { Algorithm, DisplayMode, StateUpdater } from "./types";
+import type { Algorithm, DisplayMode, DisplayType, StateUpdater } from "./types";
 import { resolveState } from "./utils/stateUpdater";
 import type { Item } from "./components/AlgorithmVisualizer/Item";
 
@@ -16,6 +16,7 @@ export type StoreState = {
   activeAlgorithm: Algorithm;
   size: number;
   displayMode: DisplayMode;
+  displayType: DisplayType
   items: Item[]
   activeItems: Item[]
   tempItems: Item[]
@@ -52,6 +53,7 @@ export const useStore = create<StoreState>((set, get) => ({
   items: generateUniqueRandomItems(30),
   activeItems: [],
   tempItems: [],
+  displayType: "done",
   doneItems: [],
   setIsMobile: (isMobile) => set({ isMobile }),
   setKValue: (kValue: number) => set({ kValue }),
@@ -89,13 +91,13 @@ export const useStore = create<StoreState>((set, get) => ({
     set((state) => ({
       activeItems: resolveState(items, state.activeItems),
     })),
-  setTempItems: (activeItems) =>
+  setTempItems: (items) =>
     set((state) => ({
-      tempItems: resolveState(activeItems, state.tempItems),
+      tempItems: resolveState(items, state.tempItems),
     })),
-  setDoneItems: (doneItems) =>
+  setDoneItems: (items) =>
     set((state) => ({
-      doneItems: resolveState(doneItems, state.doneItems),
+      doneItems: resolveState(items, state.doneItems),
     })),
 
   createNewArray: () =>

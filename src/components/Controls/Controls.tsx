@@ -6,6 +6,7 @@ import { useStore } from "@/store";
 import { SpeedSlider } from "./SpeedSlider";
 
 import type { Algorithm } from "@/types";
+import { useLeetCodeAlgorithms } from "@/hooks/useLeetCode";
 
 export const Controls = () => {
   const {
@@ -17,8 +18,10 @@ export const Controls = () => {
     doneItems,
     items,
   } = useStore();
-  const { selectionSort, bubbleSort, quickSort, insertionSort, mergeSort, reverse, jump } =
+
+  const { selectionSort, bubbleSort, quickSort, insertionSort, mergeSort,} =
     useSortingAlgorithms();
+ const { jump, rotateArray } = useLeetCodeAlgorithms();
 
   const handlePlayAnimation = async () => {
     setIsPlaying(true);
@@ -28,8 +31,9 @@ export const Controls = () => {
       quick: quickSort,
       insertion: insertionSort,
       merge: mergeSort,
-      reverse: reverse,
+      rotate_Array: rotateArray,
       jump: jump,
+      merge_Array: mergeSort,
     };
     await algorithmMap[activeAlgorithm]();
     setIsPlaying(false);

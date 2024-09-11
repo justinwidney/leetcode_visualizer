@@ -1,5 +1,5 @@
 import { StoreState, useStore } from "@/store";
-import { markAsDone, sleep, swap } from "./utils";
+import { markAsDone, sleep, swap } from "../useSortingAlgorithms/utils";
 import { Item } from "@/components/AlgorithmVisualizer/Item";
 
 type SortConfig = Pick<
@@ -83,7 +83,7 @@ const rotate = async (
   return arr
 };
 
-export const useReverse = () => {
+export const useRotateArray = () => {
   const {
     items,
     setItems,

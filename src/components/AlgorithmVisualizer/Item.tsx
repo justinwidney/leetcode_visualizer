@@ -17,6 +17,7 @@ type Props = {
   isDone: boolean;
   isTemp: boolean;
   itemMaxHeight: number;
+  height?: number;
 };
 
 const calculateItemHeight = (item: number, itemMaxHeight: number) => {
@@ -24,7 +25,7 @@ const calculateItemHeight = (item: number, itemMaxHeight: number) => {
 };
 
 export const Item = memo(
-  ({ item, isActive, isDone, isTemp, itemMaxHeight }: Props) => {
+  ({ item, isActive, isDone, isTemp, itemMaxHeight, height }: Props) => {
     const { speedRef, displayMode, size } = useStore();
 
     // Calculate animation duration, normalized between 0.05 and 2 seconds
@@ -58,7 +59,7 @@ export const Item = memo(
         style={itemStyles}
         variants={{
           active: {
-            y: displayMode === "bars" ? -itemMaxHeight / 2 : -itemMaxHeight / 8,
+            y: displayMode === "bars" ? -itemMaxHeight / 2 : -itemMaxHeight / 8, // Move the item up
           },
           done: { y: 0 },
           inactive: { y: 0 },
